@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/imagens/favicon.png" type="image/png">
+  <title>Open25h</title>
+  <script>
+    (function () {
+      const host = window.location.hostname;
+      const path = window.location.pathname;
+
+      // Só redireciona se estiver na raiz
+      if (path !== "/") return;
+
+      if (host.startsWith("sc159.")) {
+        window.location.replace("/sc159/");
+        return;
+      }
+
+      if (host.startsWith("solardavila.")) {
+        window.location.replace("/solardavila/");
+        return;
+      }
+    })();
+  </script>
+</head>
+<body>
+  <noscript>
+    <p>Selecione a loja:</p>
+    <ul>
+      <li><a href="/sc159/">São Clemente 159</a></li>
+      <li><a href="/solardavila/">Solar da Vila</a></li>
+    </ul>
+  </noscript>
+</body>
+</html>
