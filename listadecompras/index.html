@@ -619,6 +619,8 @@ document.querySelectorAll("#menu a").forEach(link => {
         
         
         <button id="limparFiltro">Limpar filtro</button>
+        <button id="limparAtendidos">Limpar Atendidos</button>
+        <button id="limparIgnorados">Limpar Ignorados</button>
     </div>
 </div>
 
@@ -5878,7 +5880,7 @@ document.querySelectorAll("#menu a").forEach(link => {
 
     
     <div class="card" data-status="OK" data-categoria="PADARIA" 
-        data-validade="VAL_15" data-cobertura="40.0" 
+        data-validade="VAL_0" data-cobertura="40.0" 
         data-consumo="0.02777777777777778"
         data-atendido="false" data-id="7896002305877" data-ignorado="false">
         <div class="card-top">
@@ -5906,7 +5908,7 @@ document.querySelectorAll("#menu a").forEach(link => {
             <table style='width:100%; border-collapse:collapse; font-size:12px;'><tr style='background:#f0f0f0;'><th style='border:1px solid #ddd; padding:4px;'>Cliente - Vendas</th><th class='col-vendas' style='border:1px solid #ddd; padding:4px;'>02/26</th><th class='col-vendas' style='border:1px solid #ddd; padding:4px;'>01/26</th><th class='col-vendas' style='border:1px solid #ddd; padding:4px;'>12/25</th><th class='col-vendas' style='border:1px solid #ddd; padding:4px;'>11/25</th><th class='col-vendas' style='border:1px solid #ddd; padding:4px;'>10/25</th></tr><tr><td style='border:1px solid #ddd; padding:4px;'>Ed São Clemente - Botafogo</td><td class='col-vendas' style='border:1px solid #ddd; padding:4px;text-align:center;'>0</td><td class='col-vendas' style='border:1px solid #ddd; padding:4px;text-align:center;'>1</td><td class='col-vendas' style='border:1px solid #ddd; padding:4px;text-align:center;'>1</td><td class='col-vendas' style='border:1px solid #ddd; padding:4px;text-align:center;'>0</td><td class='col-vendas' style='border:1px solid #ddd; padding:4px;text-align:center;'>0</td></tr><tr style='font-weight:bold; background:#e0e0e0;'><td style='border:1px solid #ddd; padding:4px;'>Total</td><td class='col-vendas' style='border:1px solid #ddd; padding:4px;text-align:center;'>0</td><td class='col-vendas' style='border:1px solid #ddd; padding:4px;text-align:center;'>1</td><td class='col-vendas' style='border:1px solid #ddd; padding:4px;text-align:center;'>1</td><td class='col-vendas' style='border:1px solid #ddd; padding:4px;text-align:center;'>0</td><td class='col-vendas' style='border:1px solid #ddd; padding:4px;text-align:center;'>0</td></tr></table>
         </div>
         <div class="tabela-validade">
-            <table style='width:100%; border-collapse:collapse; font-size:12px;'><tr style='background:#f0f0f0;'><th style='border:1px solid #ddd; padding:4px;'>Cliente - Validade</th><th style='border:1px solid #ddd; padding:4px;'>Prateleira</th></tr><tr><td style='border:1px solid #ddd; padding:4px;'>Ed São Clemente - Botafogo</td><td style='border:1px solid #ddd; padding:4px;text-align:center;' class='data_vencendo'>11/02/2026</td></tr></table>
+            <table style='width:100%; border-collapse:collapse; font-size:12px;'><tr style='background:#f0f0f0;'><th style='border:1px solid #ddd; padding:4px;'>Cliente - Validade</th><th style='border:1px solid #ddd; padding:4px;'>Prateleira</th></tr><tr><td style='border:1px solid #ddd; padding:4px;'>Ed São Clemente - Botafogo</td><td style='border:1px solid #ddd; padding:4px;text-align:center;' class='data_vencido'>11/02/2026</td></tr></table>
         </div>
         <!--
         <div class="resumo" style="display:none; margin-top:10px; font-weight:bold;">
@@ -22518,7 +22520,7 @@ document.querySelectorAll("#menu a").forEach(link => {
 
     </div>
 <div class="rodape">
-    Atualizado em <strong>10/02/2026 12:06</strong> com estoque de <strong>01/02/2026 18:34</strong> e produtos de <strong>10/02/2026 12:06</strong>.
+    Atualizado em <strong>11/02/2026 10:39</strong> com estoque de <strong>01/02/2026 18:34</strong> e produtos de <strong>10/02/2026 12:06</strong>.
 </div>
 
 
@@ -22830,6 +22832,8 @@ document.getElementById("limparFiltro").addEventListener("click", () => {
 });
 </script>
 
+
+
 <script>
 //const cards = document.querySelectorAll(".card");
 const STORAGE_ATENDIDOS = "cardsAtendidos";
@@ -22900,6 +22904,55 @@ cards.forEach(card => {
         }
     });
 });
+            
+document.getElementById("limparAtendidos").addEventListener("click", () => {
+
+    //pede confirmação se deseja mesmo limpar
+    if (!confirm("Deseja mesmo limpar todos os atendidos?")) return;
+
+     // limpa inputs
+    Object.keys(atendidosSalvos).forEach(id => {
+        delete atendidosSalvos[id];
+    });
+
+    // limpa localStorage
+    localStorage.removeItem(STORAGE_ATENDIDOS);
+
+    // limpa cards
+    cards.forEach(card => {
+        card.dataset.atendido = "false";
+        const chk = card.querySelector(".chkAtendido");
+        if (chk) chk.checked = false;
+    });
+
+    // reaplica
+    aplicarFiltros();
+});
+
+document.getElementById("limparIgnorados").addEventListener("click", () => {
+
+    //pede confirmação se deseja mesmo limpar
+    if (!confirm("Deseja mesmo limpar todos os ignorados?")) return;
+
+     // limpa inputs
+    Object.keys(ignoradosSalvos).forEach(id => {
+        delete ignoradosSalvos[id];
+    });
+
+    // limpa localStorage
+    localStorage.removeItem(STORAGE_IGNORADOS);
+
+    // limpa cards
+    cards.forEach(card => {
+        card.dataset.ignorado = "false";
+        const chk = card.querySelector(".chkIgnorado");
+        if (chk) chk.checked = false;
+    });
+
+    // reaplica
+    aplicarFiltros();
+});
+
 </script>
 
 </body>
